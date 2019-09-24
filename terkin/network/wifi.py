@@ -136,7 +136,27 @@ class WiFiManager:
         # TOOD: Make default channel configurable
         self.station.init(mode=WLAN.AP, ssid=original_ssid, auth=original_auth, channel=6, antenna=WLAN.INT_ANT)
         """
-        pass
+        log.info('in enable ip')
+        wlan = self.station
+        log.info('got wlan')
+        # Resolve mode to its numeric code
+        mode = network.WLAN.AP
+
+        ssid = "fipytest"
+        password = "hiverize"
+        encryption = 3
+        channel = 4
+
+        wlan.init(mode=mode,
+                  ssid=ssid,
+                  auth=(encryption, password),
+                  channel=channel)
+        wlan.ifconfig(id=1,
+                      config=('192.168.4.1',
+                              '255.255.255.0',
+                              '192.168.4.1',
+                              '192.168.4.1'))
+        time.sleep(10)
 
     def connect_once(self):
 
@@ -183,7 +203,7 @@ class WiFiManager:
             # ``isconnected()`` returns True when connected to a WiFi access point *and* having a valid IP address.
             if self.station is not None and self.station.isconnected():
                 ssid = self.get_ssid()
-                if ssid[0] is not None:
+                if ssid and ssid[0] is not None:
                     ip_address = self.get_ip_address()
                     if ip_address is not None and ip_address != '0.0.0.0':
                         return True

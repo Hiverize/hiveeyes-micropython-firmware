@@ -52,6 +52,19 @@ class TerkinDevice:
 
         self.rtc = None
 
+        button_ap = machine.Pin("P2",
+                            mode=machine.Pin.IN,
+                            pull=machine.Pin.PULL_UP)
+        button_ap.callback(machine.Pin.IRQ_RISING, handler=self.toggle_maintenance)
+        log.info('button callback initialised')
+
+    def toggle_maintenance(self, pin):
+        log.info('in toggle maintenace')
+        self.status.maintenance = not self.status.maintenance
+        # todo: evtl. wlan ausschalten
+        self.networking.wifi_manager.enable_ap()
+
+
     def start_networking(self):
         log.info('Starting networking')
 

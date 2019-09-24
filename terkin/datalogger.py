@@ -72,7 +72,7 @@ class TerkinDatalogger:
 
         # Initialize transient storage.
         self.storage = TransientStorage()
-
+        log.info('####################initialise device ############################################################')
         # Initialize device.
         self.device = TerkinDevice(self.application_info)
 
@@ -155,6 +155,8 @@ class TerkinDatalogger:
         except Exception as ex:
             log.exc(ex, 'Networking subsystem failed')
             self.device.status.networking = False
+
+
 
         self.device.start_telemetry()
 
